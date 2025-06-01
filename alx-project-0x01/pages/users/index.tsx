@@ -13,9 +13,20 @@ const Users: React.FC<UsersPageProps> = ({ posts }) => {
       <main className="p-4">
         <h1 className="text-2xl font-semibold mb-6">User List</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {posts?.map((user: UserProps, index: number) => (
-            <UserCard key={index} {...user} />
-          ))}
+          {posts.map(({ id, name, username, email, address, phone, website, company }: UserProps, index: number) => (
+  <UserCard
+    key={index}
+    id={id}
+    name={name}
+    username={username}
+    email={email}
+    address={address}
+    phone={phone}
+    website={website}
+    company={company}
+  />
+))}
+
         </div>
       </main>
     </div>
