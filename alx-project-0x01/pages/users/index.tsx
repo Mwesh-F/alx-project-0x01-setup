@@ -1,47 +1,47 @@
-import Header from "@/components/layout/Header";
-import UserCard from "@/components/common/UserCard";
-import { UserProps } from "@/interfaces";
+import { useState } from "react";
+import Header from "@/components/layout/Header"; // if you have a Header
+import UserModal from "@/components/common/UserModal";
+import { UserData } from "@/interfaces";
 
-interface UsersPageProps {
-  posts: UserProps[];
-}
+const UsersPage = () => {
+  const [users, setUsers] = useState<UserData[]>([]);
+  const [isModalOpen, setModalOpen] = useState(false);
 
-const Users: React.FC<UsersPageProps> = ({ posts }) => {
+  const handleAddUser = (newUser: UserData) => {
+    setUsers(prev => [...prev, { ...newUser, id: prev.length + 1 }]);
+    setModalOpen(false);
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
       <main className="p-4">
-        <h1 className="text-2xl font-semibold mb-6">User List</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {posts.map(({ id, name, username, email, address, phone, website, company }: UserProps, index: number) => (
-  <UserCard
-    key={index}
-    id={id}
-    name={name}
-    username={username}
-    email={email}
-    address={address}
-    phone={phone}
-    website={website}
-    company={company}
-  />
-))}
-
+        <div className="flex justify-between mb-6">
+          <h1 className="text-2xl font-semibold">Users</h1>
+          <button
+            className="bg-green-600 text-white px-4 py-2 rounded-full"
+            onClick={() => setModalOpen(true)}
+          >
+            Add User
+          </button>
         </div>
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {users.map(user => (
+            <li key={user.id} className="p-4 border rounded shadow">
+              <h3 className="text-lg font-bold">{user.name}</h3>
+              <p>Email: {user.email}</p>
+              <p>Phone: {user.phone}</p>
+              <p>Website: {user.website}</p>
+            </li>
+          ))}
+        </ul>
       </main>
+
+      {isModalOpen && (
+        <UserModal onClose={() => setModalOpen(false)} onSubmit={handleAddUser} />
+      )}
     </div>
   );
 };
 
-export async function getStaticProps() {
-  const response = await fetch("https://jsonplaceholder.typicode.com/users");
-  const posts = await response.json();
-
-  return {
-    props: {
-      posts,
-    },
-  };
-}
-
-export default Users;
+export default UsersPage;
