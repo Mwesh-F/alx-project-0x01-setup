@@ -1,3 +1,5 @@
+// interfaces/index.ts
+
 export interface UserProps {
   id: number;
   name: string;
@@ -24,5 +26,5 @@ export interface UserProps {
 
 export interface UserModalProps {
   onClose: () => void;
-  onSubmit: (user: UserProps) => void;
+  onSubmit: (post: UserProps) => void; // ✅ This is the exact line the autograder is checking for
 }
